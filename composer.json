@@ -9,7 +9,15 @@
         {
             "name": "Vladas Lapinskas",
             "email": "vlad.lapinskas@gmail.com",
-            "role": "Developer"
+            "role": "Maintainer"
         }
-    ]
+    ],
+    "require" : {
+	"spiral/roadrunner": "^1.5"
+    }
+    "autoload": {
+        "psr-4": {
+            "RoadRunnerUbiquity\\": "src/"
+        }
+    }
 }
