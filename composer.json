@@ -1,0 +1,15 @@
+{
+    "name": "lapinskas/roadrunner-ubiquity",
+    "type": "library",
+    "description": "RoadRunner and Ubiquity integration",
+    "keywords": ["roadrunner","ubiquity"],
+    "homepage": "https://github.com/Lapinskas/roadrunner-ubiquity",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vladas Lapinskas",
+            "email": "vlad.lapinskas@gmail.com",
+            "role": "Developer"
+        }
+    ]
+}
