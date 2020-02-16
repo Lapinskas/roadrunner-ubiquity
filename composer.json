@@ -13,8 +13,8 @@
         }
     ],
     "require" : {
-	"spiral/roadrunner": "^1.5"
-    }
+	    "spiral/roadrunner": "^1.5"
+    },
     "autoload": {
         "psr-4": {
             "RoadRunnerUbiquity\\": "src/"
