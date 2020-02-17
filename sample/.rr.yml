@@ -1,0 +1,7 @@
+http:
+  address:         ":8090"
+  workers.command: "php-cgi app/worker.php"
+#  workers:
+#    pool:
+#      numWorkers: 1
+#      maxJobs:    1
