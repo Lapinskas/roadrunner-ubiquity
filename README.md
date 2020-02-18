@@ -21,7 +21,7 @@ Ubiquity new firstProject -a
 ```
     "require": {
         ...
-        "lapinskas\/roadrunner-ubiquity" : "0.0.4.x-dev"
+        "lapinskas\/roadrunner-ubiquity" : "0.0.5.x-dev"
     },
 ```
 
