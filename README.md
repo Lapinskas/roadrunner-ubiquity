@@ -44,7 +44,7 @@ http:
 
 - [ ] Copy worker.php file
 ```
-cp vendor/lapinskas/roadrunner-ubiquity/sample/worker.php app/worker.php
+cp vendor/lapinskas/roadrunner-ubiquity/sample/worker.php worker.php
 ```
 
 - [ ] Run RoadRunner

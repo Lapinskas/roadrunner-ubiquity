@@ -4,19 +4,29 @@ namespace RoadRunnerUbiquity;
 
 use Spiral\RoadRunner\HttpClient;
 use Spiral\RoadRunner\Worker;
+use Spiral\Goridge\StreamRelay;
 
 class Request
 {
+    // Soft limit 100 Mb
+    const MEMORY_SOFT_LIMIT = 100 * 1024 * 1024;
+
     /** @var HttpClient */
     private $httpClient;
 
     private $originalServer = [];
 
-    /**
-     * @param Worker $worker
-     */
-    public function __construct(Worker $worker) {
-        $this->httpClient = new HttpClient($worker);
+    public function __construct()
+    {
+        $this->httpClient = new HttpClient(
+            new Worker(
+                new StreamRelay(
+                    defined('STDIN') ? STDIN : fopen("php://stdin", "r"),
+                    defined('STDOUT') ? STDOUT : fopen('php://stdout', 'w')
+                )
+            )
+        );
+
         $this->originalServer = $_SERVER;
     }
 
@@ -41,6 +51,7 @@ class Request
         // Prepare all superglobals
         $_SERVER = $this->configureServer($rawRequest['ctx']);
         parse_str($_SERVER['QUERY_STRING'], $_GET);
+        $_POST = $this->decodePost($rawRequest);
         $_COOKIE = $rawRequest['ctx']['cookies'] ?? [];
 
         ob_start();
@@ -50,8 +61,8 @@ class Request
     /**
      * Send response to the application server.
      *
-     * @param int        $status  Http status code
-     * @param string     $body    Body of response
+     * @param int $status Http status code
+     * @param string $body Body of response
      * @param string[][] $headers An associative array of the message's headers. Each
      *                            key MUST be a header name, and each value MUST be an array of strings
      *                            for that header.
@@ -63,12 +74,29 @@ class Request
         }
 
         foreach (headers_list() as $header) {
-            list($key, $value) = explode(':',$header);
+            list($key, $value) = explode(':', $header);
             $headers[$key] = [$value];
         }
 
         $this->httpClient->respond($status, $body, $headers);
+
         ob_end_clean();
+
+        return $this;
+    }
+
+    public function ubiquityRoute()
+    {
+        $uri = \ltrim(\urldecode(\parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/');
+
+        return $_GET['c'] = ($uri !== 'favicon.ico' && ($uri == null || !\file_exists(__DIR__ . '/' . $uri))) ? $uri : '';
+    }
+
+    public function garbageCollect($softLimit = self::MEMORY_SOFT_LIMIT)
+    {
+        if ($softLimit <= memory_get_usage()) {
+            gc_collect_cycles();
+        };
     }
 
     /**
@@ -101,8 +129,25 @@ class Request
         if (false !== $parts = parse_url($ctx['uri'])) {
             $server['QUERY_STRING'] = $parts['query'] ?? null;
             $server['REQUEST_URI'] = $parts['path'] ?? null;
+            $server['SERVER_PORT'] = $parts['port'] ?? null;
         };
 
         return $server;
+    }
+
+    protected function decodePost(array $rawRequest): array
+    {
+        $post = $_POST ?? [];
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (false !== strpos($_SERVER['CONTENT_TYPE'], 'application/x-www-form-urlencoded')) {
+                $post = array_merge(
+                    $post,
+                    (array) json_decode($rawRequest['body'])
+                );
+            }
+        }
+
+        return $post;
     }
 }

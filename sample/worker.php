@@ -1,37 +1,27 @@
 <?php
-use Spiral\Goridge;
-use Spiral\RoadRunner;
+
 use RoadRunnerUbiquity\Request;
+use Ubiquity\controllers\Startup;
 
 define('DS', DIRECTORY_SEPARATOR);
-define('ROOT', __DIR__.DS);
-$config=include_once ROOT.'config/config.php';
+define('ROOT', __DIR__.DS.'app'.DS);
 
 ini_set('display_errors', 'stderr');
+ini_set('max_execution_time', 0);
+
+$config=include_once ROOT.'config/config.php';
+$config['siteUrl'] = 'http://127.0.0.1:8090/';
+
 require_once ROOT.'./../vendor/autoload.php';
 require_once ROOT.'config/services.php';
 
-$in = defined('STDIN') ? STDIN : fopen("php://stdin","r");
-$out = defined('STDOUT') ? STDOUT : fopen('php://stdout', 'w');
+$request = new Request();
 
-$worker = new RoadRunner\Worker(new Goridge\StreamRelay($in, $out));
-$request = new Request($worker);
-
-\Ubiquity\controllers\Startup::init($config);
+Startup::init($config);
 
 while ($request->acceptRequest()) {
-
-    $uri = \ltrim(\urldecode(\parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)),'/');
-    if ($uri!=='favicon.ico' && ($uri==null || !\file_exists(__DIR__ . '/../' .$uri))) {
-        $_GET['c'] = $uri;
-    }else{
-        $_GET['c']='';
-    }
-
-    $start = microtime(true);
-    \Ubiquity\controllers\Startup::forward($_GET['c']);
-    $duration = (microtime(true) - $start) * 1000;
-    file_put_contents("/tmp/rr.txt",$duration);
-
-    $request->sendResponse();
+    Startup::forward(
+        $request->ubiquityRoute()
+    );
+    $request->sendResponse()->garbageCollect();
 }
