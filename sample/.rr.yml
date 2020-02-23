@@ -3,8 +3,9 @@ http:
   workers.command: "php-cgi worker.php"
   workers:
     pool:
+      # Set numWorkers to 1 while debugging
       numWorkers: 10
-      maxJobs:    2000
+      maxJobs:    1000
 
 # static file serving. remove this section to disable static file serving.
 static:

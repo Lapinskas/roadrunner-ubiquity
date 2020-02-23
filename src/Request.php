@@ -6,18 +6,29 @@ use Spiral\RoadRunner\HttpClient;
 use Spiral\RoadRunner\Worker;
 use Spiral\Goridge\StreamRelay;
 
+/**
+ * Class Request
+ * @package RoadRunnerUbiquity
+ */
 class Request
 {
-    // Soft limit 100 Mb
+    /**
+     * Soft memory limit set to 100 Mb
+     */
     const MEMORY_SOFT_LIMIT = 100 * 1024 * 1024;
 
-    /** @var HttpClient */
     private $httpClient;
-
     private $originalServer = [];
+    private $rawRequest = [];
 
+    /**
+     * Request constructor.
+     *      Opens stream relay with RoadRunner
+     *      Stores original $_SERVER variable
+     */
     public function __construct()
     {
+        // If STDIN or STDOUT are not defined, let's open it
         $this->httpClient = new HttpClient(
             new Worker(
                 new StreamRelay(
@@ -31,29 +42,23 @@ class Request
     }
 
     /**
-     * @return Worker
+     * @return boolean
      */
-    public function getWorker(): Worker
+    public function acceptRequest() : bool
     {
-        return $this->httpClient->getWorker();
-    }
-
-    /**
-     * @return boolean|null
-     */
-    public function acceptRequest()
-    {
-        $rawRequest = $this->httpClient->acceptRequest();
-        if ($rawRequest === null) {
-            return null;
+        if (null === $this->rawRequest = $this->httpClient->acceptRequest()) {
+            return false;
         }
 
         // Prepare all superglobals
-        $_SERVER = $this->configureServer($rawRequest['ctx']);
-        parse_str($_SERVER['QUERY_STRING'], $_GET);
-        $_POST = $this->decodePost($rawRequest);
-        $_COOKIE = $rawRequest['ctx']['cookies'] ?? [];
+        $_SERVER    = $this->prepareServer();
+        $_GET       = $this->prepareGet();
+        $_POST      = $this->preparePost();
+        $_COOKIE    = $this->prepareCookie();
+        $_FILES     = $this->prepareFiles();
+        $_REQUEST   = $this->prepareRequest();
 
+        // Start output buffering
         ob_start();
         return true;
     }
@@ -80,11 +85,17 @@ class Request
 
         $this->httpClient->respond($status, $body, $headers);
 
+        // Finish output buffering and clean the buffer
         ob_end_clean();
 
         return $this;
     }
 
+    /**
+     * Ubiquity - specific routing
+     *
+     * @return string
+     */
     public function ubiquityRoute()
     {
         $uri = \ltrim(\urldecode(\parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/');
@@ -92,6 +103,12 @@ class Request
         return $_GET['c'] = ($uri !== 'favicon.ico' && ($uri == null || !\file_exists(__DIR__ . '/' . $uri))) ? $uri : '';
     }
 
+    /**
+     * Force garbage collection if memory usage exceeds soft memory limit
+     * Should be used under heavy load
+     *
+     * @param float|int $softLimit
+     */
     public function garbageCollect($softLimit = self::MEMORY_SOFT_LIMIT)
     {
         if ($softLimit <= memory_get_usage()) {
@@ -100,14 +117,23 @@ class Request
     }
 
     /**
+     * @return Worker
+     */
+    public function getWorker(): Worker
+    {
+        return $this->httpClient->getWorker();
+    }
+
+    /**
      * Returns altered copy of _SERVER variable. Sets ip-address,
      * request-time and other values.
      *
-     * @param array $ctx
      * @return array
      */
-    protected function configureServer(array $ctx): array
+    protected function prepareServer(): array
     {
+        $ctx = $this->rawRequest['ctx'];
+
         $server = $this->originalServer;
 
         $server['REQUEST_TIME'] = time();
@@ -135,19 +161,83 @@ class Request
         return $server;
     }
 
-    protected function decodePost(array $rawRequest): array
+    /**
+     * Returns parsed query string.
+     *
+     * @return array
+     */
+    protected function prepareGet(): array
+    {
+        parse_str($_SERVER['QUERY_STRING'], $get);
+
+        return $get;
+    }
+
+    /**
+     * Returns decoded request body.
+     *
+     * @return array
+     */
+    protected function preparePost(): array
     {
         $post = $_POST ?? [];
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if (false !== strpos($_SERVER['CONTENT_TYPE'], 'application/x-www-form-urlencoded')) {
-                $post = array_merge(
-                    $post,
-                    (array) json_decode($rawRequest['body'])
-                );
-            }
+        if (
+            isset($_SERVER['CONTENT_TYPE']) && (
+                false !== strpos($_SERVER['CONTENT_TYPE'], 'application/x-www-form-urlencoded') ||
+                false !== strpos($_SERVER['CONTENT_TYPE'], 'multipart/form-data')
+            )
+        ) {
+            $post = array_merge(
+                $post,
+                (array) json_decode($this->rawRequest['body'])
+            );
         }
 
         return $post;
+    }
+
+    /**
+     * Returns cookies.
+     *
+     * @return array
+     */
+    protected function prepareCookie(): array
+    {
+        return $this->rawRequest['ctx']['cookies'] ?? [];
+    }
+
+    /**
+     * Returns uploaded files array.
+     *
+     * @return array
+     */
+    protected function prepareFiles() : array
+    {
+        $ctx = $this->rawRequest['ctx'];
+
+        if (!isset($ctx['uploads'])) {
+            return [];
+        }
+
+        foreach ($ctx['uploads'] as &$upload) {
+            $upload['type'] = $upload['mime'] ?? null;
+        }
+
+        return $ctx['uploads'];
+    }
+
+    /**
+     * Returns request as a merge of respective arrays.
+     *
+     * @return array
+     */
+    protected function prepareRequest(): array
+    {
+        return array_merge(
+            $_GET,
+            $_POST,
+            $_COOKIE
+        );
     }
 }
