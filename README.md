@@ -3,9 +3,6 @@
 
 Makes [the fastest PHP framework][link_php_bench] even faster.
 
-## Requirements
- * PHP-CGI 7.4
-
 ## Installation
 ```shell
 $ composer require lapinskas/roadrunner-ubiquity
@@ -39,10 +36,6 @@ $ sudo apt-get install php7.4-cgi
 [Install Ubiquity Framework](https://micro-framework.readthedocs.io/en/latest/quickstart/quickstart.html
 ) using Composer
 
-### RoadRunner
-[Install RoadRunner](https://roadrunner.dev/docs/intro-install) via Composer
-
-
 ## Usage
 As an example of a basic usage, let's create default Ubiquity project and run it using RoadRunner
 
@@ -60,7 +53,7 @@ Edit composer.json of your 'firstProject' and add requirement for this package
 ```
 "require": {
     ...
-    "lapinskas\/roadrunner-ubiquity" : "^1.0.0"
+    "lapinskas\/roadrunner-ubiquity": "^1.0"
 },
 ```
 
@@ -69,7 +62,7 @@ Edit composer.json of your 'firstProject' and add requirement for this package
 $ composer update
 ```
 
-### Get latest binary of the RoadRunner
+### RoadRunner
 The following command will automatically download latest binary executable to the project folder
 ```shell
 $ vendor/bin/rr get
@@ -80,6 +73,7 @@ Copy RoadRunner sample configuration to the project root. Edit it if you need to
 ```shell
 $ cp vendor/lapinskas/roadrunner-ubiquity/sample/.rr.yml .rr.yml
 ```
+
 ### Copy default Worker
 Worker is the main entry point of the application and the replacement of traditional index.php file. Copy sample worker.php to the project root.
 ```shell
@@ -96,10 +90,14 @@ $ ./rr serve -v -d
 Open admin page of Ubiquity application in your browser
 [http://127.0.0.1:8090/Admin](http://127.0.0.1:8090/Admin)
 
-Ubiquity application is exactly the same and could be run through "Ubiquity serve", NGINX or Apache server. The only change is the entry point of the application.
+Ubiquity application is exactly the same and could be run using command "Ubiquity serve", NGINX or Apache servers. The only change is the entry point of the application.
 
 ### Benchmarking
-Please feel free to run some benchmarking tests of RoadRunner+Ubiquity vs NGINX+Ubiquity or Apache+Ubiquity. In my case I have achieved more than 100% increase in the number of requests per second and twice quicker response time.
+Each worker takes some time for the bootstraping / initialization for the very first request.
+The consecutive requests do not require the bootstraping that results in much faster processing after all workers have been initialized.
+
+Please feel free to run some benchmarking tests of RoadRunner+Ubiquity vs NGINX+Ubiquity or Apache+Ubiquity.
+Preliminary tests have shown more than 100% increase in the number of requests per second and twice quicker response time.
 
 ## Changelog
 [![Version][badge_packagist_version]][link_packagist]
