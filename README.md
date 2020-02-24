@@ -1,58 +1,120 @@
-# roadrunner-ubiquity
-RoadRunner and Ubiquity integration
+# [RoadRunner][link_roadrunner] and [Ubiquity][link_ubiquity] Integration
+[![Version][badge_packagist_version]][link_packagist]
+
+Makes [the fastest PHP framework][link_php_bench] even faster.
+
+## Requirements
+ * PHP-CGI 7.4
 
 ## Installation
-```
-composer require lapinskas/roadrunner-ubiquity
-```
-
-### How to create and test integration
-- [ ] Install php-cgi
-
-- [ ] [Install Ubiquity](https://micro-framework.readthedocs.io/en/latest/quickstart/quickstart.html
-)
-
-- [ ] Create sample project
-```
-Ubiquity new firstProject -a
+```shell
+$ composer require lapinskas/roadrunner-ubiquity
 ```
 
-- [ ] Edit composer.json
-```
-    "require": {
-        ...
-        "lapinskas\/roadrunner-ubiquity" : "^1.0.0"
-    },
+## Dependencies
+### Composer
+Get [Composer](https://getcomposer.org/download/) if you have not done it yet
+
+### PHP-CGI
+php-cgi 7.4 is required for this package. 
+> Please note it's php-cgi, not php, so most probably you have not it installed by default.
+
+#### Installation on Ubuntu 18.04 LTS
+As of today, PHP 7.4 is not available in Ubuntu default repositories. In order to install it, you will have to get it from third-party repositories.
+```shell
+$ sudo add-apt-repository ppa:ondrej/php
 ```
 
-- [ ] Update composer
-```
-composer update
-```
-
-- [ ] Get RoadRunner
-```
-vendor/bin/rr get
+Then update and upgrade to PHP 7.4
+```shell
+$ sudo apt update
 ```
 
-- [ ] Create RoadRunner config file .rr.yml in project root o
-```
-http:
-  address:         ":8090"
-  workers.command: "php-cgi app/worker.php"
+and install php-cgi
+```shell
+$ sudo apt-get install php7.4-cgi
 ```
 
-- [ ] Copy worker.php file
+### Ubiquity Framework
+[Install Ubiquity Framework](https://micro-framework.readthedocs.io/en/latest/quickstart/quickstart.html
+) using Composer
+
+### RoadRunner
+[Install RoadRunner](https://roadrunner.dev/docs/intro-install) via Composer
+
+
+## Usage
+As an example of a basic usage, let's create default Ubiquity project and run it using RoadRunner
+
+### Create sample Ubiquity project
+Let's create new project called 'firstProject' in a folder of your choice.
+Flag -a adds rather powerful MyUbiquityAdmin application that we can use for usage testing.
+```shell
+$ Ubiquity new firstProject -a
+$ cd firstProject
 ```
-cp vendor/lapinskas/roadrunner-ubiquity/sample/worker.php worker.php
+> Note: if Ubiquity is not in your path, you can find it at ~/.composer/vendor/phpmv/ubiquity-devtools/src/Ubiquity
+
+### Add sample project requirements
+Edit composer.json of your 'firstProject' and add requirement for this package
+```
+"require": {
+    ...
+    "lapinskas\/roadrunner-ubiquity" : "^1.0.0"
+},
 ```
 
-- [ ] Run RoadRunner
-```
-./rr serve -v -d
+### Update composer
+```shell
+$ composer update
 ```
 
-- [ ] Open admin page of Ubiquity application
+### Get latest binary of the RoadRunner
+The following command will automatically download latest binary executable to the project folder
+```shell
+$ vendor/bin/rr get
 ```
-http://127.0.0.1:8090/Admin
+
+### Copy RoadRunner configuration
+Copy RoadRunner sample configuration to the project root. Edit it if you need to change port of other settings
+```shell
+$ cp vendor/lapinskas/roadrunner-ubiquity/sample/.rr.yml .rr.yml
 ```
+### Copy default worker
+Worker is the main entry point of the application. Copy sample worker to the project root.
+```shell
+$ cp vendor/lapinskas/roadrunner-ubiquity/sample/worker.php worker.php
+```
+
+### Run RoadRunner
+Start RoadRunner in debug mode
+```
+$ ./rr serve -v -d
+```
+
+### Open MyUbiquityAdmin page
+Open admin page of Ubiquity application in your browser
+[http://127.0.0.1:8090/Admin](http://127.0.0.1:8090/Admin)
+
+Feel free to run some benchmarking tests
+
+## Changelog
+[![Latest Stable Version](https://poser.pugx.org/lapinskas/roadrunner-ubiquity/v/stable)](https://packagist.org/packages/lapinskas/roadrunner-ubiquity)
+[![Release date][badge_release_date]][link_releases]
+
+Changelog can be [found here][link_changes_log].
+
+## License
+[![License](https://poser.pugx.org/lapinskas/roadrunner-ubiquity/license)](https://packagist.org/packages/lapinskas/roadrunner-ubiquity)
+
+This is open-sourced software licensed under the [MIT License][link_license].
+
+[badge_packagist_version]:https://img.shields.io/packagist/v/lapinskas/roadrunner-ubiquity.svg?maxAge=180
+[badge_release_date]:https://img.shields.io/github/release-date/Lapinskas/roadrunner-ubiquity.svg?style=flat-square&maxAge=180
+[link_roadrunner]:https://github.com/spiral/roadrunner
+[link_ubiquity]:https://github.com/phpMv/ubiquity
+[link_packagist]:https://packagist.org/packages/lapinskas/roadrunner-ubiquity
+[link_php_bench]:http://www.phpbenchmarks.com/en/
+[link_releases]:https://github.com/Lapinskas/roadrunner-ubiquity/releases
+[link_changes_log]:https://github.com/Lapinskas/roadrunner-ubiquity/CHANGELOG.md
+[link_license]:https://github.com/Lapinskas/roadrunner-ubiquity/blob/master/LICENSE
