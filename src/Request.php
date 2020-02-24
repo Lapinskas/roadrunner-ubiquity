@@ -44,19 +44,19 @@ class Request
     /**
      * @return boolean
      */
-    public function acceptRequest() : bool
+    public function acceptRequest(): bool
     {
         if (null === $this->rawRequest = $this->httpClient->acceptRequest()) {
             return false;
         }
 
         // Prepare all superglobals
-        $_SERVER    = $this->prepareServer();
-        $_GET       = $this->prepareGet();
-        $_POST      = $this->preparePost();
-        $_COOKIE    = $this->prepareCookie();
-        $_FILES     = $this->prepareFiles();
-        $_REQUEST   = $this->prepareRequest();
+        $_SERVER = $this->prepareServer();
+        $_GET = $this->prepareGet();
+        $_POST = $this->preparePost();
+        $_COOKIE = $this->prepareCookie();
+        $_FILES = $this->prepareFiles();
+        $_REQUEST = $this->prepareRequest();
 
         // Start output buffering
         ob_start();
@@ -184,13 +184,14 @@ class Request
 
         if (
             isset($_SERVER['CONTENT_TYPE']) && (
+                false !== strpos($_SERVER['CONTENT_TYPE'], 'application/json') ||
                 false !== strpos($_SERVER['CONTENT_TYPE'], 'application/x-www-form-urlencoded') ||
                 false !== strpos($_SERVER['CONTENT_TYPE'], 'multipart/form-data')
             )
         ) {
             $post = array_merge(
                 $post,
-                (array) json_decode($this->rawRequest['body'])
+                json_decode($this->rawRequest['body'], true)
             );
         }
 
@@ -212,7 +213,7 @@ class Request
      *
      * @return array
      */
-    protected function prepareFiles() : array
+    protected function prepareFiles(): array
     {
         $ctx = $this->rawRequest['ctx'];
 
