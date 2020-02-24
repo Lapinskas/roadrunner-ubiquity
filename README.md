@@ -53,7 +53,7 @@ Edit composer.json of your 'firstProject' and add requirement for this package
 ```
 "require": {
     ...
-    "lapinskas\/roadrunner-ubiquity" : "^1.0.0"
+    "lapinskas\/roadrunner-ubiquity": "^1.0"
 },
 ```
 
@@ -90,10 +90,14 @@ $ ./rr serve -v -d
 Open admin page of Ubiquity application in your browser
 [http://127.0.0.1:8090/Admin](http://127.0.0.1:8090/Admin)
 
-Ubiquity application is exactly the same and could be run through "Ubiquity serve", NGINX or Apache server. The only change is the entry point of the application.
+Ubiquity application is exactly the same and could be run using command "Ubiquity serve", NGINX or Apache servers. The only change is the entry point of the application.
 
 ### Benchmarking
-Please feel free to run some benchmarking tests of RoadRunner+Ubiquity vs NGINX+Ubiquity or Apache+Ubiquity. In my case I have achieved more than 100% increase in the number of requests per second and twice quicker response time.
+Each worker takes some time for the bootstraping / initialization for the very first request.
+The consecutive requests do not require the bootstraping that results in much faster processing after all workers have been initialized.
+
+Please feel free to run some benchmarking tests of RoadRunner+Ubiquity vs NGINX+Ubiquity or Apache+Ubiquity.
+Preliminary tests have shown more than 100% increase in the number of requests per second and twice quicker response time.
 
 ## Changelog
 [![Version][badge_packagist_version]][link_packagist]
