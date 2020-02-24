@@ -102,7 +102,7 @@ Ubiquity application is exactly the same and could be run through "Ubiquity serv
 Please feel free to run some benchmarking tests of RoadRunner+Ubiquity vs NGINX+Ubiquity or Apache+Ubiquity. In my case I have achieved more than 100% increase in the number of requests per second and twice quicker response time.
 
 ## Changelog
-[![Latest Stable Version](https://poser.pugx.org/lapinskas/roadrunner-ubiquity/v/stable)](https://packagist.org/packages/lapinskas/roadrunner-ubiquity)
+[![Version][badge_packagist_version]][link_packagist]
 [![Release date][badge_release_date]][link_releases]
 
 Changelog can be [found here][link_changes_log].
@@ -119,5 +119,5 @@ This is open-sourced software licensed under the [MIT License][link_license].
 [link_packagist]:https://packagist.org/packages/lapinskas/roadrunner-ubiquity
 [link_php_bench]:http://www.phpbenchmarks.com/en/
 [link_releases]:https://github.com/Lapinskas/roadrunner-ubiquity/releases
-[link_changes_log]:https://github.com/Lapinskas/roadrunner-ubiquity/CHANGELOG.md
+[link_changes_log]:https://github.com/Lapinskas/roadrunner-ubiquity/blob/master/CHANGELOG.md
 [link_license]:https://github.com/Lapinskas/roadrunner-ubiquity/blob/master/LICENSE
