@@ -3,9 +3,6 @@
 
 Makes [the fastest PHP framework][link_php_bench] even faster.
 
-## Requirements
- * PHP-CGI 7.4
-
 ## Installation
 ```shell
 $ composer require lapinskas/roadrunner-ubiquity
@@ -39,10 +36,6 @@ $ sudo apt-get install php7.4-cgi
 [Install Ubiquity Framework](https://micro-framework.readthedocs.io/en/latest/quickstart/quickstart.html
 ) using Composer
 
-### RoadRunner
-[Install RoadRunner](https://roadrunner.dev/docs/intro-install) via Composer
-
-
 ## Usage
 As an example of a basic usage, let's create default Ubiquity project and run it using RoadRunner
 
@@ -69,7 +62,7 @@ Edit composer.json of your 'firstProject' and add requirement for this package
 $ composer update
 ```
 
-### Get latest binary of the RoadRunner
+### RoadRunner
 The following command will automatically download latest binary executable to the project folder
 ```shell
 $ vendor/bin/rr get
@@ -80,6 +73,7 @@ Copy RoadRunner sample configuration to the project root. Edit it if you need to
 ```shell
 $ cp vendor/lapinskas/roadrunner-ubiquity/sample/.rr.yml .rr.yml
 ```
+
 ### Copy default Worker
 Worker is the main entry point of the application and the replacement of traditional index.php file. Copy sample worker.php to the project root.
 ```shell
