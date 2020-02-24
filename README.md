@@ -19,7 +19,7 @@ Get [Composer](https://getcomposer.org/download/) if you have not done it yet
 php-cgi 7.4 is required for this package. 
 > Please note it's php-cgi, not php, so most probably you have not it installed by default.
 
-#### Installation on Ubuntu 18.04 LTS
+#### php-cgi installation on Ubuntu 18.04 LTS
 As of today, PHP 7.4 is not available in Ubuntu default repositories. In order to install it, you will have to get it from third-party repositories.
 ```shell
 $ sudo add-apt-repository ppa:ondrej/php
@@ -80,8 +80,8 @@ Copy RoadRunner sample configuration to the project root. Edit it if you need to
 ```shell
 $ cp vendor/lapinskas/roadrunner-ubiquity/sample/.rr.yml .rr.yml
 ```
-### Copy default worker
-Worker is the main entry point of the application. Copy sample worker to the project root.
+### Copy default Worker
+Worker is the main entry point of the application and the replacement of traditional index.php file. Copy sample worker.php to the project root.
 ```shell
 $ cp vendor/lapinskas/roadrunner-ubiquity/sample/worker.php worker.php
 ```
@@ -96,7 +96,10 @@ $ ./rr serve -v -d
 Open admin page of Ubiquity application in your browser
 [http://127.0.0.1:8090/Admin](http://127.0.0.1:8090/Admin)
 
-Feel free to run some benchmarking tests
+Ubiquity application is exactly the same and could be run through "Ubiquity serve", NGINX or Apache server. The only change is the entry point of the application.
+
+### Benchmarking
+Please feel free to run some benchmarking tests of RoadRunner+Ubiquity vs NGINX+Ubiquity or Apache+Ubiquity. In my case I have achieved more than 100% increase in the number of requests per second and twice quicker response time.
 
 ## Changelog
 [![Latest Stable Version](https://poser.pugx.org/lapinskas/roadrunner-ubiquity/v/stable)](https://packagist.org/packages/lapinskas/roadrunner-ubiquity)
