@@ -10,10 +10,11 @@
         {
             "name": "Vladas Lapinskas",
             "email": "vlad.lapinskas@gmail.com",
-            "role": "Maintainer"
+            "role": "Author"
         }
     ],
     "require" : {
+        "php": "^7.4.0",
 	    "spiral/roadrunner": "^1.5"
     },
     "autoload": {
