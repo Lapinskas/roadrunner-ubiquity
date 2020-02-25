@@ -41,7 +41,7 @@ As an example of a basic usage, let's create default Ubiquity project and run it
 
 ### Create sample Ubiquity project
 Let's create new project called 'firstProject' in a folder of your choice.
-Flag -a adds rather powerful MyUbiquityAdmin application that we can use for usage testing.
+Flag -a adds rather powerful UbiquityMyadmin application that we can use for usage testing.
 ```shell
 $ Ubiquity new firstProject -a
 $ cd firstProject
@@ -78,7 +78,7 @@ Start RoadRunner in debug mode
 $ ./rr serve -v -d
 ```
 
-### Open MyUbiquityAdmin page
+### Open UbiquityMyadmin page
 Open admin page of Ubiquity application in your browser
 [http://127.0.0.1:8090/Admin](http://127.0.0.1:8090/Admin)
 
