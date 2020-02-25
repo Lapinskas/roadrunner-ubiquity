@@ -48,18 +48,10 @@ $ cd firstProject
 ```
 > Note: if Ubiquity is not in your path, you can find it at ~/.composer/vendor/phpmv/ubiquity-devtools/src/Ubiquity
 
-### Add sample project requirements
-Edit composer.json of your 'firstProject' and add requirement for this package
-```
-"require": {
-    ...
-    "lapinskas\/roadrunner-ubiquity": "^1.0"
-},
-```
-
-### Update composer
+### Require RoadRunner - Ubiquity integration
+Reqire this package via composer
 ```shell
-$ composer update
+$ composer require lapinskas/roadrunner-ubiquity
 ```
 
 ### RoadRunner
