@@ -81,6 +81,7 @@ class Request
         foreach (headers_list() as $header) {
             list($key, $value) = explode(':', $header);
             $headers[$key] = [$value];
+            header_remove($key);
         }
 
         $this->httpClient->respond($status, $body, $headers);
