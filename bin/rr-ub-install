@@ -1,0 +1,7 @@
+#!/bin/sh
+vendor/bin/rr get
+
+cp vendor/lapinskas/roadrunner-ubiquity/sample/.rr.yml ./.ubiquity/.rr.yml
+ln -s .rr.yml ./.ubiquity/.rr.yml
+
+cp vendor/lapinskas/roadrunner-ubiquity/sample/rr-worker.php ./.ubiquity/rr-worker.php
