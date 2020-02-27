@@ -1,6 +1,6 @@
 http:
   address:         ":8090"
-  workers.command: "php-cgi worker.php"
+  workers.command: "php-cgi ./.ubiquity/rr-worker.php"
   workers:
     pool:
       # Set numWorkers to 1 while debugging
