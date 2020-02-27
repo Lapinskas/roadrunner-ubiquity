@@ -22,11 +22,7 @@
             "RoadRunnerUbiquity\\": "src/"
         }
     },
-    "scripts": {
-        "post-install-cmd": [
-            "vendor/bin/rr get",
-            "cp vendor/lapinskas/roadrunner-ubiquity/sample/.rr.yml ./ubiquity/.rr.yml",
-            "cp vendor/lapinskas/roadrunner-ubiquity/sample/worker.php ./.ubiquity/rrIndex.php"
-        ]
-    }
+    "bin": [
+        "bin/rr-ub-install"
+    ]
 }
