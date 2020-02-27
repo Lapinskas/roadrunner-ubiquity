@@ -54,22 +54,10 @@ Reqire this package via composer
 $ composer require lapinskas/roadrunner-ubiquity
 ```
 
-### RoadRunner
-The following command will automatically download latest binary executable to the project folder
+### RoadRunner installation
+The following command will automatically download latest binary executable to the project folder and copy necessary files.
 ```shell
-$ vendor/bin/rr get
-```
-
-### Copy RoadRunner configuration
-Copy RoadRunner sample configuration to the project root. Edit it if you need to change port of other settings
-```shell
-$ cp vendor/lapinskas/roadrunner-ubiquity/sample/.rr.yml .rr.yml
-```
-
-### Copy default Worker
-Worker is the main entry point of the application and the replacement of traditional index.php file. Copy sample worker.php to the project root.
-```shell
-$ cp vendor/lapinskas/roadrunner-ubiquity/sample/worker.php worker.php
+$ vendor/bin/rr-ub-install
 ```
 
 ### Run RoadRunner
