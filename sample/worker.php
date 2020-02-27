@@ -15,7 +15,7 @@ $config['siteUrl'] = 'http://127.0.0.1:8090/';
 require_once ROOT.'vendor/autoload.php';
 require_once ROOT.'app/config/services.php';
 
-$request = new Request();
+$request = new Request($config);
 
 Startup::init($config);
 
