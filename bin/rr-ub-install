@@ -1,7 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 vendor/bin/rr get
 
+[ ! -d ".ubiquity" ] && mkdir -p ".ubiquity"
+
 cp vendor/lapinskas/roadrunner-ubiquity/sample/.rr.yml ./.ubiquity/.rr.yml
-ln -s .rr.yml ./.ubiquity/.rr.yml
+ln -s ./.ubiquity/.rr.yml .rr.yml
 
 cp vendor/lapinskas/roadrunner-ubiquity/sample/rr-worker.php ./.ubiquity/rr-worker.php
