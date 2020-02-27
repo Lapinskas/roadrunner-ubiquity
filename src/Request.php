@@ -20,13 +20,14 @@ class Request
     private $httpClient;
     private $originalServer = [];
     private $rawRequest = [];
+    private $config;
 
     /**
      * Request constructor.
      *      Opens stream relay with RoadRunner
      *      Stores original $_SERVER variable
      */
-    public function __construct()
+    public function __construct($config)
     {
         // If STDIN or STDOUT are not defined, let's open it
         $this->httpClient = new HttpClient(
@@ -39,6 +40,7 @@ class Request
         );
 
         $this->originalServer = $_SERVER;
+        $this->config = $config;
     }
 
     /**
@@ -57,6 +59,7 @@ class Request
         $_COOKIE = $this->prepareCookie();
         $_FILES = $this->prepareFiles();
         $_REQUEST = $this->prepareRequest();
+        $_SESSION = $this->prepareSession();
 
         // Start output buffering
         ob_start();
@@ -88,6 +91,9 @@ class Request
 
         // Finish output buffering and clean the buffer
         ob_end_clean();
+
+        // Close the session
+        session_write_close();
 
         return $this;
     }
@@ -241,5 +247,21 @@ class Request
             $_POST,
             $_COOKIE
         );
+    }
+
+    protected function prepareSession(): array
+    {
+        if (PHP_SESSION_ACTIVE == session_status()) {
+            session_write_close();
+        }
+
+        session_id(
+            $_COOKIE[$this->config['sessionName']] ?? \bin2hex ( \random_bytes ( 32 ) )
+        );
+
+        $_SESSION = [];
+        session_start();
+
+        return $_SESSION;
     }
 }

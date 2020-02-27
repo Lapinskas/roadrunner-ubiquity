@@ -1,4 +1,10 @@
 # Changelog
+## [1.0.4] - 2020-02-26
+
+### Fixed
+
+- Sessions have been fixed
+
 ## [1.0.3] - 2020-02-25
 
 ### Fixed
