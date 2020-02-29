@@ -26,7 +26,7 @@ class Request
 
     private $config;
 
-    private $hasSession = false;
+    private $hasSession;
 
     /**
      * Request constructor.
@@ -40,7 +40,7 @@ class Request
 
         $this->originalServer = $_SERVER;
         $this->config = $config;
-        $this->hasSession = $this->config['sessionName'] ?? false;
+        $this->hasSession = $config['sessionName'] ?? false;
     }
 
     /**
