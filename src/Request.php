@@ -1,5 +1,4 @@
 <?php
-
 namespace RoadRunnerUbiquity;
 
 use Spiral\RoadRunner\HttpClient;
@@ -8,42 +7,44 @@ use Spiral\Goridge\StreamRelay;
 
 /**
  * Class Request
+ *
  * @package RoadRunnerUbiquity
  */
 class Request
 {
+
     /**
      * Soft memory limit set to 100 Mb
      */
     const MEMORY_SOFT_LIMIT = 100 * 1024 * 1024;
 
     private $httpClient;
+
     private $originalServer = [];
+
     private $rawRequest = [];
+
     private $config;
+
+    private $hasSession;
 
     /**
      * Request constructor.
-     *      Opens stream relay with RoadRunner
-     *      Stores original $_SERVER variable
+     * Opens stream relay with RoadRunner
+     * Stores original $_SERVER variable
      */
     public function __construct($config)
     {
         // If STDIN or STDOUT are not defined, let's open it
-        $this->httpClient = new HttpClient(
-            new Worker(
-                new StreamRelay(
-                    defined('STDIN') ? STDIN : fopen("php://stdin", "r"),
-                    defined('STDOUT') ? STDOUT : fopen('php://stdout', 'w')
-                )
-            )
-        );
+        $this->httpClient = new HttpClient(new Worker(new StreamRelay(defined('STDIN') ? STDIN : fopen("php://stdin", "r"), defined('STDOUT') ? STDOUT : fopen('php://stdout', 'w'))));
 
         $this->originalServer = $_SERVER;
         $this->config = $config;
+        $this->hasSession = $config['sessionName'] ?? false;
     }
 
     /**
+     *
      * @return boolean
      */
     public function acceptRequest(): bool
@@ -59,7 +60,9 @@ class Request
         $_COOKIE = $this->prepareCookie();
         $_FILES = $this->prepareFiles();
         $_REQUEST = $this->prepareRequest();
-        $_SESSION = $this->prepareSession();
+        if ($this->hasSession) {
+            $_SESSION = $this->prepareSession();
+        }
 
         // Start output buffering
         ob_start();
@@ -69,11 +72,14 @@ class Request
     /**
      * Send response to the application server.
      *
-     * @param int $status Http status code
-     * @param string $body Body of response
-     * @param string[][] $headers An associative array of the message's headers. Each
-     *                            key MUST be a header name, and each value MUST be an array of strings
-     *                            for that header.
+     * @param int $status
+     *            Http status code
+     * @param string $body
+     *            Body of response
+     * @param string[][] $headers
+     *            An associative array of the message's headers. Each
+     *            key MUST be a header name, and each value MUST be an array of strings
+     *            for that header.
      */
     public function sendResponse(int $status = 200, string $body = null, array $headers = [])
     {
@@ -82,8 +88,10 @@ class Request
         }
 
         foreach (headers_list() as $header) {
-            list($key, $value) = explode(':', $header);
-            $headers[$key] = [$value];
+            list ($key, $value) = explode(':', $header);
+            $headers[$key] = [
+                $value
+            ];
             header_remove($key);
         }
 
@@ -93,7 +101,9 @@ class Request
         ob_end_clean();
 
         // Close the session
-        session_write_close();
+        if ($this->hasSession) {
+            session_write_close();
+        }
 
         return $this;
     }
@@ -107,7 +117,7 @@ class Request
     {
         $uri = \ltrim(\urldecode(\parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/');
 
-        return $_GET['c'] = ($uri !== 'favicon.ico' && ($uri == null || !\file_exists(__DIR__ . '/' . $uri))) ? $uri : '';
+        return $_GET['c'] = ($uri !== 'favicon.ico' && ($uri == null || ! \file_exists(__DIR__ . '/' . $uri))) ? $uri : '';
     }
 
     /**
@@ -120,10 +130,12 @@ class Request
     {
         if ($softLimit <= memory_get_usage()) {
             gc_collect_cycles();
-        };
+        }
+        ;
     }
 
     /**
+     *
      * @return Worker
      */
     public function getWorker(): Worker
@@ -132,7 +144,8 @@ class Request
     }
 
     /**
-     * Returns altered copy of _SERVER variable. Sets ip-address,
+     * Returns altered copy of _SERVER variable.
+     * Sets ip-address,
      * request-time and other values.
      *
      * @return array
@@ -150,7 +163,10 @@ class Request
         $server['HTTP_USER_AGENT'] = '';
         foreach ($ctx['headers'] as $key => $value) {
             $key = strtoupper(str_replace('-', '_', $key));
-            if (\in_array($key, ['CONTENT_TYPE', 'CONTENT_LENGTH'])) {
+            if (\in_array($key, [
+                'CONTENT_TYPE',
+                'CONTENT_LENGTH'
+            ])) {
                 $server[$key] = implode(', ', $value);
             } else {
                 $server['HTTP_' . $key] = implode(', ', $value);
@@ -163,7 +179,8 @@ class Request
             $server['QUERY_STRING'] = $parts['query'] ?? null;
             $server['REQUEST_URI'] = $parts['path'] ?? null;
             $server['SERVER_PORT'] = $parts['port'] ?? null;
-        };
+        }
+        ;
 
         return $server;
     }
@@ -189,17 +206,8 @@ class Request
     {
         $post = $_POST ?? [];
 
-        if (
-            isset($_SERVER['CONTENT_TYPE']) && (
-                false !== strpos($_SERVER['CONTENT_TYPE'], 'application/json') ||
-                false !== strpos($_SERVER['CONTENT_TYPE'], 'application/x-www-form-urlencoded') ||
-                false !== strpos($_SERVER['CONTENT_TYPE'], 'multipart/form-data')
-            )
-        ) {
-            $post = array_merge(
-                $post,
-                json_decode($this->rawRequest['body'], true)
-            );
+        if (isset($_SERVER['CONTENT_TYPE']) && (false !== strpos($_SERVER['CONTENT_TYPE'], 'application/json') || false !== strpos($_SERVER['CONTENT_TYPE'], 'application/x-www-form-urlencoded') || false !== strpos($_SERVER['CONTENT_TYPE'], 'multipart/form-data'))) {
+            $post = array_merge($post, json_decode($this->rawRequest['body'], true));
         }
 
         return $post;
@@ -224,7 +232,7 @@ class Request
     {
         $ctx = $this->rawRequest['ctx'];
 
-        if (!isset($ctx['uploads'])) {
+        if (! isset($ctx['uploads'])) {
             return [];
         }
 
@@ -242,11 +250,7 @@ class Request
      */
     protected function prepareRequest(): array
     {
-        return array_merge(
-            $_GET,
-            $_POST,
-            $_COOKIE
-        );
+        return array_merge($_GET, $_POST, $_COOKIE);
     }
 
     protected function prepareSession(): array
@@ -255,9 +259,7 @@ class Request
             session_write_close();
         }
 
-        session_id(
-            $_COOKIE[$this->config['sessionName']] ?? \bin2hex ( \random_bytes ( 32 ) )
-        );
+        session_id($_COOKIE[$this->config['sessionName']] ?? \bin2hex(\random_bytes(32)));
 
         $_SESSION = [];
         session_start();
