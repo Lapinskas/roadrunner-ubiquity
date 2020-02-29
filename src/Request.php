@@ -28,6 +28,8 @@ class Request
 
     private $hasSession;
 
+    private $uri;
+
     /**
      * Request constructor.
      * Opens stream relay with RoadRunner
@@ -115,7 +117,7 @@ class Request
      */
     public function ubiquityRoute()
     {
-        $uri = \ltrim(\urldecode(\parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/');
+        $uri = \ltrim($this->uri, '/');
 
         return $_GET['c'] = ($uri !== 'favicon.ico' && ($uri == null || ! \file_exists(__DIR__ . '/' . $uri))) ? $uri : '';
     }
@@ -131,7 +133,6 @@ class Request
         if ($softLimit <= memory_get_usage()) {
             gc_collect_cycles();
         }
-        ;
     }
 
     /**
@@ -152,7 +153,7 @@ class Request
      */
     protected function prepareServer(): array
     {
-        $ctx = $this->rawRequest['ctx'];
+        $ctx = &$this->rawRequest['ctx'];
 
         $server = $this->originalServer;
 
@@ -177,10 +178,9 @@ class Request
 
         if (false !== $parts = parse_url($ctx['uri'])) {
             $server['QUERY_STRING'] = $parts['query'] ?? null;
-            $server['REQUEST_URI'] = $parts['path'] ?? null;
+            $server['REQUEST_URI'] = $this->uri = $parts['path'] ?? null;
             $server['SERVER_PORT'] = $parts['port'] ?? null;
         }
-        ;
 
         return $server;
     }
@@ -230,7 +230,7 @@ class Request
      */
     protected function prepareFiles(): array
     {
-        $ctx = $this->rawRequest['ctx'];
+        $ctx = &$this->rawRequest['ctx'];
 
         if (! isset($ctx['uploads'])) {
             return [];
