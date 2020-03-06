@@ -1,4 +1,10 @@
 # Changelog
+## [1.0.8] - 2020-02-29
+
+### Fixed
+
+- Configuration is now compatible with Uniquity devtools. Thanks to @wizzybenson
+
 ## [1.0.7] - 2020-02-29
 
 ### Added
@@ -29,7 +35,7 @@
 
 - First stable release
 
-
+[1.0.8]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.0.8
 [1.0.7]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.0.7
 [1.0.6]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.0.6
 [1.0.4]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.0.4
