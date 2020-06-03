@@ -4,13 +4,22 @@
 Makes [the fastest PHP framework][link_php_bench] even faster.
 
 ## Installation
+### Automatic installation
+Just tell Ubiquity to run with RoadRunner
+```shell
+$ Ubiquity serve -t=roadrunner
+```
+All required components (except of PHP-CGI) will be installed at the first launch.
+
+### Manual installation
+If you need package for your own projects, just require it via composer
 ```shell
 $ composer require lapinskas/roadrunner-ubiquity
 ```
 
 ## Dependencies
-### Composer
-Get [Composer](https://getcomposer.org/download/) if you have not done it yet
+### Ubiquity
+Get [Ubiquiry Framework](https://github.com/phpMv/ubiquity) if you have not done it yet
 
 ### PHP-CGI
 php-cgi 7.4 is required for this package. 
@@ -32,10 +41,6 @@ and install php-cgi
 $ sudo apt-get install php7.4-cgi
 ```
 
-### Ubiquity Framework
-[Install Ubiquity Framework](https://micro-framework.readthedocs.io/en/latest/quickstart/quickstart.html
-) using Composer
-
 ## Usage
 As an example of a basic usage, let's create default Ubiquity project and run it using RoadRunner
 
@@ -48,20 +53,14 @@ $ cd firstProject
 ```
 > Note: if Ubiquity is not in your path, you can find it at ~/.composer/vendor/phpmv/ubiquity-devtools/src/Ubiquity
 
-### Require RoadRunner - Ubiquity integration
-Reqire this package via composer
+### Run Ubiquity
+Tell Ubiquity to run using RoadRunner
 ```shell
-$ composer require lapinskas/roadrunner-ubiquity
+$ Ubiquity serve -t=roadrunner
 ```
 
-### RoadRunner installation
-The following command will automatically download latest binary executable to the project folder and copy necessary files.
-```shell
-$ vendor/bin/rr-ub-install
-```
-
-### Run RoadRunner
-Start RoadRunner in debug mode
+### Alternative - Run RoadRunner directly
+Run RoadRunner in debug mode
 ```
 $ ./rr serve -v -d
 ```
