@@ -1,5 +1,5 @@
 # Changelog
-## [1.0.9] - 2020-09-08
+## [1.1.0] - 2020-09-08
 
 ### Fixed
 
@@ -41,7 +41,7 @@
 
 - First stable release
 
-[1.0.9]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.0.9
+[1.1.0]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.1.0
 [1.0.8]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.0.8
 [1.0.7]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.0.7
 [1.0.6]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.0.6
