@@ -14,7 +14,7 @@
         }
     ],
     "require" : {
-        "php": "^7.4.0",
+        "php": ">=7.4",
 	    "spiral/roadrunner": "^1.5"
     },
     "autoload": {
