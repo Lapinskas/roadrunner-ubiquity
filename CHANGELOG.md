@@ -1,4 +1,10 @@
 # Changelog
+## [1.1.0] - 2021-01-22
+
+### Fixed
+
+- Compatibility with PHP 8
+
 ## [1.1.0] - 2020-09-08
 
 ### Fixed
@@ -41,6 +47,7 @@
 
 - First stable release
 
+[1.1.1]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.1.1
 [1.1.0]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.1.0
 [1.0.8]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.0.8
 [1.0.7]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.0.7
