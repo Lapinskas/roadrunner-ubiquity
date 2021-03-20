@@ -53,6 +53,7 @@
 
 - First stable release
 
+[1.1.2]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.1.2
 [1.1.1]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.1.1
 [1.1.0]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.1.0
 [1.0.8]: https://github.com/Lapinskas/roadrunner-ubiquity/releases/tag/1.0.8
