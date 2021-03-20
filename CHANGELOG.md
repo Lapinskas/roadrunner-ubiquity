@@ -1,5 +1,11 @@
 # Changelog
-## [1.1.0] - 2021-01-22
+## [1.1.2] - 2021-03-20
+
+### Fixed
+
+- Compatibility with RoadRunner 2.0
+
+## [1.1.1] - 2021-01-22
 
 ### Fixed
 
